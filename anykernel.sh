@@ -4,13 +4,14 @@
 ## AnyKernel setup
 # begin properties
 properties() {
-kernel.string=B-baka! by Cirno @ not-xda-developers
+kernel.string=dont_flash_this by fucked_up_developers
 do.devicecheck=1
 do.modules=1
 do.cleanup=1
 do.cleanuponabort=0
 device.name1=oxygen
 device.name2=oxygen_retail
+supported.versions=7.1.1
 } # end properties
 
 # shell variables
@@ -34,9 +35,8 @@ chown -R root:root $ramdisk/*;
 
 dump_boot;
 
-# Set the default background app limit to 60
-insert_line default.prop "ro.sys.fw.bg_apps_limit=60" before "ro.secure=1" "ro.sys.fw.bg_apps_limit=60";
-
+# begin ramdisk changes
+insert_line init.rc "init.lewd.rc" after "import /init.\${ro.zygote}.rc" "import /init.lewd.rc";
 # end ramdisk changes
 
 write_boot;
