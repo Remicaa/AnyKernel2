@@ -11,7 +11,6 @@ do.cleanup=1
 do.cleanuponabort=0
 device.name1=oxygen
 device.name2=oxygen_retail
-supported.versions=7.1.1
 } # end properties
 
 # shell variables
