@@ -1,42 +1,31 @@
 import /init.performance_profiles.rc
 
-   # Everything here won't interfere with qcom-post-boot
-   on property:sys.boot_completed=1
+	# Everything here won't interfere with qcom-post-boot
+	on property:sys.boot_completed=1
 
-   # Declare support for Franco Kernel Manager Performance Profiles
-      setprop fku.profiles 1
+		# Declare support for Franco Kernel Manager Performance Profiles
+		setprop fku.profiles 1
 
-      chown system system /sys/module/cpu_input_boost/parameters/input_boost_freq
-      chown system system /sys/module/cpu_input_boost/parameters/input_boost_duration_ms
-      chmod system system /sys/module/workqueue/parameters/power_efficient
-      chmod system system /sys/devices/soc/1c00000.qcom,kgsl-3d0/devfreq/1c00000.qcom,kgsl-3d0/governor
-      chmod system system /sys/module/cpu_input_boost/parameters/max_boost_freq
+		# according to Qcom this legacy value improves first launch latencies
+		# stock value is 512k
+		setprop dalvik.vm.heapminfree 2m
 
-      chmod 664 /sys/module/cpu_input_boost/parameters/input_boost_freq
-      chmod 664 /sys/module/cpu_input_boost/parameters/input_boost_duration_ms
-      chmod 664 /sys/module/workqueue/parameters/power_efficient
-      chmod 664 /sys/devices/soc/1c00000.qcom,kgsl-3d0/devfreq/1c00000.qcom,kgsl-3d0/governor
-      chmod 664 /sys/module/cpu_input_boost/parameters/max_boost_freq
+		chmod system system /sys/module/workqueue/parameters/power_efficient
+		chmod system system /sys/devices/soc/1c00000.qcom,kgsl-3d0/devfreq/1c00000.qcom,kgsl-3d0/governor
 
-      # Set thermal restrictions
-      write /sys/kernel/msm_thermal/enabled 0
-      write /sys/kernel/msm_thermal/zone0 "2150400 34 33"
-      write /sys/kernel/msm_thermal/zone1 "2016000 35 34"
-      write /sys/kernel/msm_thermal/zone2 "1958400 36 35"
-      write /sys/kernel/msm_thermal/zone3 "1804800 37 36"
-      write /sys/kernel/msm_thermal/zone4 "1689600 38 37"
-      write /sys/kernel/msm_thermal/zone5 "1401600 39 38"
-      write /sys/kernel/msm_thermal/zone6 "1036800 40 39"
-      write /sys/kernel/msm_thermal/zone7 "652800 45 40"
-      write /sys/kernel/msm_thermal/sampling_ms 3000
-      write /sys/kernel/msm_thermal/enabled 1
+		chmod 664 /sys/module/workqueue/parameters/power_efficient
+		chmod 664 /sys/devices/soc/1c00000.qcom,kgsl-3d0/devfreq/1c00000.qcom,kgsl-3d0/governor
 
-   # Must be executed after qcom-post-boot
-   on property:init.svc.qcom-post-boot=stopped
+		# CPUQuiet
+		#chmod 0644 /sys/devices/system/cpu/cpuquiet/nr_min_cpus
+		#write /sys/devices/system/cpu/cpuquiet/nr_min_cpus 4
+		#chmod 0664 /sys/devices/system/cpu/cpuquiet/nr_min_cpus
 
-      # Set max freq following default profile
-      write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor electron
-      write /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 1804800
-      write /sys/module/cpu_input_boost/parameters/max_boost_freq 1401600
-      #write /sys/devices/soc/1c00000.qcom,kgsl-3d0/devfreq/1c00000.qcom,kgsl-3d0/governor simple_ondemand
-      write /sys/block/mmcblk1/queue/read_ahead_kb 128
+	# Must be executed after qcom-post-boot
+	on property:init.svc.qcom-post-boot=stopped
+
+		write /sys/module/cpu_boost/parameters/input_boost_freq "0:1036800"
+	    write /sys/module/cpu_boost/parameters/input_boost_ms 750
+
+		# Set max freq following default profile
+		write /proc/touchpanel/enable_dt2w 1
