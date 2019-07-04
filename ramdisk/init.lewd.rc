@@ -18,14 +18,27 @@ import /init.performance_profiles.rc
 
 		# CPUQuiet
 		#chmod 0644 /sys/devices/system/cpu/cpuquiet/nr_min_cpus
-		#write /sys/devices/system/cpu/cpuquiet/nr_min_cpus 4
+		#write /sys/devices/system/cpu/cpuquiet/nr_min_cpus 2
 		#chmod 0664 /sys/devices/system/cpu/cpuquiet/nr_min_cpus
+		
+		write /proc/touchpanel/enable_dt2w 1
+
+		# Set thermal restrictions
+    	#write /sys/kernel/msm_thermal/zone0 "2150400 40 39"
+    	#write /sys/kernel/msm_thermal/zone1 "2016000 41 40"
+    	#write /sys/kernel/msm_thermal/zone2 "1958400 42 41"
+    	#write /sys/kernel/msm_thermal/zone3 "1804800 43 42"
+    	#write /sys/kernel/msm_thermal/zone4 "1689600 44 43"
+    	#write /sys/kernel/msm_thermal/zone5 "1401600 45 44"
+    	#write /sys/kernel/msm_thermal/zone6 "1036800 46 45"
+    	#write /sys/kernel/msm_thermal/zone7 "652800 49 46"
+    	#write /sys/kernel/msm_thermal/sampling_ms 3000
+    	#write /sys/kernel/msm_thermal/enabled 1
 
 	# Must be executed after qcom-post-boot
 	on property:init.svc.qcom-post-boot=stopped
 
+		#write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor electron
 		write /sys/module/cpu_boost/parameters/input_boost_freq "0:1036800"
-	    write /sys/module/cpu_boost/parameters/input_boost_ms 750
-
-		# Set max freq following default profile
+	    write /sys/module/cpu_boost/parameters/input_boost_ms 128
 		write /proc/touchpanel/enable_dt2w 1
